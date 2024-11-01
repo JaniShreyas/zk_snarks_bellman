@@ -4,10 +4,12 @@ extern crate ff;
 extern crate rand;
 
 mod bellman_utils;
-mod experimentation_utils;
 mod circuits;
+mod experimentation_utils;
 
-use bellman_utils::{verify_matrix_multiplication, verify_polynomial, verify_multivar_polynomial};
+use bellman_utils::{
+    verify_division, verify_matrix_multiplication, verify_multivar_polynomial, verify_polynomial,
+};
 
 use std::env;
 
@@ -17,4 +19,5 @@ fn main() {
     verify_polynomial();
     verify_matrix_multiplication();
     verify_multivar_polynomial();
+    verify_division();
 }

@@ -1,5 +1,7 @@
 use crate::circuits::{
-    matrix_multiplication::MatrixMultiplication, multivar_polynomial::MultiVarPolynomialCircuit,
+    division::DivisionCircuit, 
+    matrix_multiplication::MatrixMultiplication,
+    multivar_polynomial::MultiVarPolynomialCircuit,
     polynomial::PolynomialCircuit,
 };
 
@@ -157,5 +159,37 @@ pub fn verify_multivar_polynomial() {
         &[Fr::from(391)],
         10,
         "multivar_polynomial",
+    );
+}
+
+pub fn verify_division() {
+    let rng = &mut thread_rng();
+
+    // Generate random parameters
+    let params = {
+        let c = DivisionCircuit::<Fr> {
+            numerator: None,
+            denominator: None,
+            quotient: None,
+        };
+        generate_random_parameters::<Bls12, _, _>(c, rng).unwrap()
+    };
+
+    let pvk = prepare_verifying_key(&params.vk);
+
+    // Provide concrete values to test (e.g., 8 / 2 = 4)
+    let c = DivisionCircuit {
+        numerator: Some(Fr::from(8)),
+        denominator: Some(Fr::from(2)),
+        quotient: Some(Fr::from(4)),
+    };
+
+    generate_and_verify_proof(
+        c,
+        &params,
+        &pvk,
+        &[Fr::from(4)], // expected output (quotient)
+        2,
+        "division_circuit",
     );
 }

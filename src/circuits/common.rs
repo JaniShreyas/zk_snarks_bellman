@@ -1,4 +1,4 @@
-pub use bellman::{Circuit, ConstraintSystem, SynthesisError};
+pub use bellman::{Circuit, ConstraintSystem, SynthesisError,};
 pub use ff::PrimeField;
 
 pub trait OptionExt<T> {
