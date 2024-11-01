@@ -1,3 +1,9 @@
 proof_type,proof_time,r_proof_size,s_proof_size,verification_time,num_constraints
 polynomial,0.0602538,408,192,0.0255413,2
 complex,0.0568907,408,192,0.0398739,21
+polynomial,0.0527747,408,192,0.0252473,2
+complex,0.0624463,408,192,0.0362113,21
+polynomial,0.0582734,408,192,0.0265449,2
+complex,0.0615322,408,192,0.0372996,20
+polynomial,0.0544642,408,192,0.0256825,2
+complex,0.0595932,408,192,0.0361693,20

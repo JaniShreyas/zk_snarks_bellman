@@ -1,3 +1,3 @@
 pub mod polynomial;
-pub mod complex;
+pub mod matrix_multiplication;
 pub mod common;

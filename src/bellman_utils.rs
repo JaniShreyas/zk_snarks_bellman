@@ -1,4 +1,4 @@
-use crate::circuits::{polynomial::PolynomialCircuit, complex::ComplexCircuit};
+use crate::circuits::{polynomial::PolynomialCircuit, matrix_multiplication::MatrixMultiplication};
 
 use std::time::Instant;
 use bls12_381::{Bls12, Scalar as Fr};
@@ -86,15 +86,9 @@ pub fn verify_complex() {
 
     // Generate random parameters
     let params = {
-        let c = ComplexCircuit::<Fr> {
-            x: None,
-            a: None,
-            b: None,
-            c: None,
-            d: None,
+        let c = MatrixMultiplication::<Fr> {
             m1: None,
             m2: None,
-            poly_result: None,
             matrix_result: None,
         };
 
@@ -103,15 +97,9 @@ pub fn verify_complex() {
 
     let pvk = prepare_verifying_key(&params.vk);
 
-    let c = ComplexCircuit {
-        x: Some(Fr::from(256)),
-        a: Some(Fr::from(2)),
-        b: Some(Fr::from(3)),
-        c: Some(Fr::from(5)),
-        d: Some(Fr::from(7)),
+    let c = MatrixMultiplication {
         m1: Some([[Fr::from(1), Fr::from(2)], [Fr::from(3), Fr::from(4)]]),
         m2: Some([[Fr::from(5), Fr::from(6)], [Fr::from(7), Fr::from(8)]]),
-        poly_result: Some(Fr::from(33752327)),
         matrix_result: Some([[Fr::from(19), Fr::from(22)], [Fr::from(43), Fr::from(50)]]),
     };
 
@@ -141,7 +129,6 @@ pub fn verify_complex() {
         &pvk,
         &proof,
         &[
-            Fr::from(33752327),
             Fr::from(19),
             Fr::from(22),
             Fr::from(43),
@@ -152,7 +139,7 @@ pub fn verify_complex() {
     println!("Proof verification time: {:?}", proof_verification_time);
     assert!(result.is_ok());
 
-    let num_constraints = 21; // Based on the synthesize function above
+    let num_constraints = 20; // Based on the synthesize function above
     println!("Number of constraints: {}", num_constraints);
 
     // Write results to CSV
