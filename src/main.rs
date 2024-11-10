@@ -16,11 +16,16 @@ fn main() {
     std::env::set_var("RUST_BACKTRACE", "1");
     // Uncomment the function you want to run
 
-    let iterations = 1;
-    let fibo_n = 10;
-    let expected_fn_val = 55;
+    let iterations = 10;
 
     println!("Running tests");
+
+    let fibo_tests = vec![
+        (10, 55),
+        (15, 610),
+        (20, 6765),
+        (25, 75025),
+    ];
 
     for _ in 0..iterations {
         verify_polynomial();
@@ -28,6 +33,9 @@ fn main() {
         verify_multivar_polynomial();
         verify_division();
         verify_xor();
-        verify_fibonacci(fibo_n, expected_fn_val);
+
+        for (n, expected) in &fibo_tests {
+            verify_fibonacci(*n, *expected);
+        }
     }
 }
