@@ -3,6 +3,8 @@ use crate::circuits::{
     matrix_multiplication::MatrixMultiplication,
     multivar_polynomial::MultiVarPolynomialCircuit,
     polynomial::PolynomialCircuit,
+    xor::XorCircuit,
+    fibonacci::FibonacciCircuit,
 };
 
 use bellman::groth16::{
@@ -191,5 +193,64 @@ pub fn verify_division() {
         &[Fr::from(4)], // expected output (quotient)
         2,
         "division_circuit",
+    );
+}
+
+pub fn verify_xor() {
+    let rng = &mut thread_rng();
+
+    // Generate random parameters
+    let params = {
+        let c = XorCircuit::<Fr> {
+            a: None,
+            b: None,
+            result: None,
+        };
+        generate_random_parameters::<Bls12, _, _>(c, rng).unwrap()
+    };
+
+    let pvk = prepare_verifying_key(&params.vk);
+
+    let c = crate::circuits::xor::XorCircuit {
+        a: Some(Fr::from(1)),
+        b: Some(Fr::from(0)),
+        result: Some(Fr::from(1)),
+    };
+
+    generate_and_verify_proof(c, &params, &pvk, &[Fr::from(1)], 2, "xor_circuit");
+}
+
+pub fn verify_fibonacci(n: usize, expected_fn_val: u64) {
+    let rng = &mut thread_rng();
+
+    // Generate random parameters
+    let params = {
+        let c = FibonacciCircuit::<Fr> {
+            f0: None,
+            f1: None,
+            fn_val: None,
+            n,
+        };
+        generate_random_parameters::<Bls12, _, _>(c, rng).unwrap()
+    };
+
+    let pvk = prepare_verifying_key(&params.vk);
+
+    // Initialize the circuit with initial values for f0 and f1, and the target Fibonacci value
+    let c = FibonacciCircuit {
+        f0: Some(Fr::from(0)),
+        f1: Some(Fr::from(1)),
+        fn_val: Some(Fr::from(expected_fn_val)),
+        n,
+    };
+
+    // Call the general proof generation and verification function
+    generate_and_verify_proof(
+        c,
+        &params,
+        &pvk,
+        &[Fr::from(expected_fn_val)], // public input is the expected nth Fibonacci number
+        n, // total number of constraints is n
+        "fibonacci_circuit",
     );
 }
