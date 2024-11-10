@@ -16,7 +16,7 @@ fn main() {
     std::env::set_var("RUST_BACKTRACE", "1");
     // Uncomment the function you want to run
 
-    let iterations = 10;
+    let iterations = 100;
 
     println!("Running tests");
 

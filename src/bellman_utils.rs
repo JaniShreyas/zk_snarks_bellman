@@ -108,19 +108,28 @@ pub fn verify_matrix_multiplication() {
 
     let pvk = prepare_verifying_key(&params.vk);
 
+    // let c = MatrixMultiplication {
+    //     m1: Some([[Fr::from(1), Fr::from(2)], [Fr::from(3), Fr::from(4)]]),
+    //     m2: Some([[Fr::from(5), Fr::from(6)], [Fr::from(7), Fr::from(8)]]),
+    //     matrix_result: Some([[Fr::from(19), Fr::from(22)], [Fr::from(43), Fr::from(50)]]),
+    // };
+
     let c = MatrixMultiplication {
-        m1: Some([[Fr::from(1), Fr::from(2)], [Fr::from(3), Fr::from(4)]]),
-        m2: Some([[Fr::from(5), Fr::from(6)], [Fr::from(7), Fr::from(8)]]),
-        matrix_result: Some([[Fr::from(19), Fr::from(22)], [Fr::from(43), Fr::from(50)]]),
+        m1: Some([[Fr::from(123), Fr::from(456)], 
+              [Fr::from(789), Fr::from(101)]]),
+        m2: Some([[Fr::from(112), Fr::from(131)], 
+              [Fr::from(415), Fr::from(161)]]),
+        matrix_result: Some([[Fr::from(203016), Fr::from(89529)], 
+            [Fr::from(130283), Fr::from(119620)]]),
     };
 
     generate_and_verify_proof(
         c,
         &params,
         &pvk,
-        &[Fr::from(19), Fr::from(22), Fr::from(43), Fr::from(50)],
+        &[Fr::from(203016), Fr::from(89529), Fr::from(130283), Fr::from(119620)],
         20,
-        "matrix_multiplication",
+        "mat_mul",
     );
 }
 
@@ -145,22 +154,22 @@ pub fn verify_multivar_polynomial() {
     let pvk = prepare_verifying_key(&params.vk);
 
     let c = MultiVarPolynomialCircuit {
-        x: Some(Fr::from(2)),
-        y: Some(Fr::from(3)),
-        a: Some(Fr::from(4)),
-        b: Some(Fr::from(5)),
-        c: Some(Fr::from(6)),
-        d: Some(Fr::from(7)),
-        result: Some(Fr::from(391)),
+        x: Some(Fr::from(222)),
+        y: Some(Fr::from(333)),
+        a: Some(Fr::from(444)),
+        b: Some(Fr::from(555)),
+        c: Some(Fr::from(666)),
+        d: Some(Fr::from(777)),
+        result: Some(Fr::from(538688548680321)),
     };
 
     generate_and_verify_proof(
         c,
         &params,
         &pvk,
-        &[Fr::from(391)],
+        &[Fr::from(538688548680321)],
         10,
-        "multivar_polynomial",
+        "multivar_poly",
     );
 }
 
@@ -181,18 +190,18 @@ pub fn verify_division() {
 
     // Provide concrete values to test (e.g., 8 / 2 = 4)
     let c = DivisionCircuit {
-        numerator: Some(Fr::from(8)),
-        denominator: Some(Fr::from(2)),
-        quotient: Some(Fr::from(4)),
+        numerator: Some(Fr::from(4003859412)),
+        denominator: Some(Fr::from(45678)),
+        quotient: Some(Fr::from(87654)),
     };
 
     generate_and_verify_proof(
         c,
         &params,
         &pvk,
-        &[Fr::from(4)], // expected output (quotient)
+        &[Fr::from(87654)], // expected output (quotient)
         2,
-        "division_circuit",
+        "division",
     );
 }
 
@@ -217,7 +226,7 @@ pub fn verify_xor() {
         result: Some(Fr::from(1)),
     };
 
-    generate_and_verify_proof(c, &params, &pvk, &[Fr::from(1)], 2, "xor_circuit");
+    generate_and_verify_proof(c, &params, &pvk, &[Fr::from(1)], 2, "xor");
 }
 
 pub fn verify_fibonacci(n: usize, expected_fn_val: u64) {
@@ -251,6 +260,6 @@ pub fn verify_fibonacci(n: usize, expected_fn_val: u64) {
         &pvk,
         &[Fr::from(expected_fn_val)], // public input is the expected nth Fibonacci number
         n, // total number of constraints is n
-        "fibonacci_circuit",
+        "fibonacci",
     );
 }
